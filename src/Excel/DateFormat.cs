@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Excel
 {
-    public class Date : IExcelUtility
+    public class DateFormat : IExcelUtility
     {
         private const string ResultPath = "_DATE_EXPORT.txt";
 
-        public Date()
+        public DateFormat()
         {
             if (File.Exists(ResultPath))
             {
@@ -29,7 +29,7 @@ namespace Excel
 			try
 			{
                 string formattedDate = $"{toParse[indexArr[0]]}{toParse[indexArr[1]]}/{toParse[indexArr[2]]}{toParse[indexArr[3]]}/{toParse[indexArr[4]]}{toParse[indexArr[5]]}{toParse[indexArr[6]]}{toParse[indexArr[7]]}{Environment.NewLine}";
-                File.AppendAllText(ResultPath, formattedDate);
+                File.AppendAllText(GET_RESULT_PATH(), formattedDate);
 			}
 			catch (Exception e)
 			{
@@ -46,13 +46,35 @@ namespace Excel
                 string formattedDate = $"{toParse[indexArr[0]]}{toParse[indexArr[1]]}/";
                 formattedDate += MONTH_TO_INT($"{toParse[indexArr[2]]}{toParse[indexArr[3]]}{toParse[indexArr[4]]}").ToString();
                 formattedDate += $"/{toParse[indexArr[5]]}{toParse[indexArr[6]]}{toParse[indexArr[7]]}{toParse[indexArr[8]]}{Environment.NewLine}";
-                File.AppendAllText(ResultPath, formattedDate);
+                File.AppendAllText(GET_RESULT_PATH(), formattedDate);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
                 Console.ReadKey();
             }
+        }
+
+        public void CONVERT_QUARTERLY_TO_MONTHLY(string[] toParse)
+        {
+            var _sb = new StringBuilder();
+
+            foreach (var q in toParse)
+            {
+                //Add the start of the quarter
+                _sb.Append(q + Environment.NewLine);
+
+                //Add the next 2 months
+                int quarterStart = Convert.ToInt32($"{q[3]}{q[4]}");
+
+                var qm1 = q[0].ToString() + q[1].ToString() + q[2].ToString() + (quarterStart + 1).ToString() + q[5].ToString() + q[6].ToString() + q[7].ToString() + q[8].ToString() + q[9].ToString() + Environment.NewLine;
+                _sb.Append(qm1);
+
+                var qm2 = q[0].ToString() + q[1].ToString() + q[2].ToString() + (quarterStart + 2).ToString() + q[5].ToString() + q[6].ToString() + q[7].ToString() + q[8].ToString() + q[9].ToString() + Environment.NewLine;
+                _sb.Append(qm2);
+            }
+
+            File.WriteAllText(GET_RESULT_PATH(), _sb.ToString());
         }
 
         public enum Month
