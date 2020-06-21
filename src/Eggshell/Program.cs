@@ -27,7 +27,7 @@ namespace Eggshell
 
             Console.WriteLine($"Using -> {args[0]}{Environment.NewLine}");
             DISPLAY_FUNCTIONS();
-            PARSE_INPUT_DEBUG(args);
+            PARSE_INPUT(args);
             Console.WriteLine("Operation finished");
             Console.ReadKey();
         }
